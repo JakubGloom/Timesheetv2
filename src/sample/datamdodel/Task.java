@@ -3,12 +3,17 @@ package sample.datamdodel;
 public class Task {
     private int idTask;
     private String name;
-    private String description;
+    private String descirption;
+
+    public Task(String name, String descirption) {
+        this.name = name;
+        this.descirption = descirption;
+    }
 
     public Task(int idTask, String name, String description) {
         this.idTask = idTask;
         this.name = name;
-        this.description = description;
+        this.descirption = description;
     }
 
     public Task(String name) {
@@ -31,16 +36,17 @@ public class Task {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescirption() {
+        return descirption;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.descirption = description;
     }
+
 
     @Override
     public String toString() {
-        return getName();
+        return name;
     }
 }

@@ -1,12 +1,10 @@
 package sample.worksheet;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.PointLight;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -15,6 +13,7 @@ import javafx.stage.Stage;
 import sample.conectivity.ConnectionManager;
 import sample.datamdodel.Employee;
 import sample.datamdodel.EmployeeDAO;
+import sample.datamdodel.StageManager;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -34,14 +33,13 @@ public class LoginController {
     @FXML
     private TextField textFieldLogin;
 
-    private Employee loggedEmployee;
     private ResultSet result;
 
     @FXML
-    public void onButtonClicked(ActionEvent event) throws SQLException{
+    public void onButtonClicked(ActionEvent event) {
         if (this.isLoginValid()) {
             System.out.println("Login success");
-            openWorkdayScene(event, loggedEmployee);
+            openWorkdayScene(event);
         } else {
             textFieldLogin.clear();
             passwordFieldPassword.clear();
@@ -52,13 +50,13 @@ public class LoginController {
         }
     }
 
-    private boolean isLoginValid() throws SQLException {
-        try (PreparedStatement loginQuery = connection.dbConnect().prepareStatement("SELECT idEmployee FROM employee WHERE Login=? AND Password=?")) {
+    private boolean isLoginValid() {
+        try (PreparedStatement loginQuery = ConnectionManager.dbConnect().prepareStatement("SELECT idEmployee FROM employee WHERE Login=? AND Password=?")) {
             loginQuery.setString(1, textFieldLogin.getText());
             loginQuery.setString(2, passwordFieldPassword.getText());
             result = loginQuery.executeQuery();
             if(result.next()) {
-                loggedEmployee = EmployeeDAO.searchEmployee(result.getInt("idEmployee"));
+                Employee.loggedEmployee = EmployeeDAO.searchEmployee(result.getInt("idEmployee"));
                 return true;
             }
             } catch (SQLException e) {
@@ -73,18 +71,16 @@ public class LoginController {
     }
 
 
-    private void openWorkdayScene(ActionEvent event, Employee loggedEmployee){
+    private void openWorkdayScene(ActionEvent event) {
         try {
             FXMLLoader loader=new FXMLLoader(getClass().getResource("Workday.fxml"));
             Parent root = loader.load();
 
-            WorkdayController workdayController =loader.getController();
-            workdayController.initializeLoggedEmployeeData(loggedEmployee);
-
-            Stage stage=new Stage();
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.show();
+            Stage stageWorkday = new Stage();
+            StageManager.stages.add(stageWorkday);
+            stageWorkday.setScene(new Scene(root));
+            stageWorkday.setResizable(false);
+            stageWorkday.show();
 
             ((Node)(event.getSource())).getScene().getWindow().hide();
         } catch (IOException e) {

@@ -135,4 +135,22 @@ private static StringBuilder stringBuilder;
         password = stringBuilder.toString();
         return password;
     }
+
+    public static void updateEmployee(int idEmployeeToEdit, String name, String surname, int access) {
+        {
+            String updateStmt = "UPDATE account join employee on account.idEmployee = employee.idEmployee join " +
+                    "acess on account.idAcess = acess.idAcess set employee.Name = '" + name + "'" +
+                    " , employee.Surname ='" + surname + "'" +
+                    ", account.idAcess =" + access + " " +
+                    "where employee.idEmployee =" + idEmployeeToEdit;
+            try {
+                ConnectionManager.dbExecuteUpdate(updateStmt);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }

@@ -1,7 +1,7 @@
 package sample.worksheet;
 
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTimePicker;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,24 +10,18 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import sample.admin.ManageEmployeesController;
-import sample.conectivity.ConnectionManager;
-import sample.datamdodel.Employee;
-import sample.datamdodel.Event;
-import sample.datamdodel.Task;
+import sample.datamdodel.*;
 
-import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class WorkdayController implements Initializable {
@@ -44,6 +38,12 @@ public class WorkdayController implements Initializable {
     private Button buttonEmployees;
 
     @FXML
+    private Button buttonAdd;
+
+    @FXML
+    private Button buttonRemove;
+
+    @FXML
     private Button btnLogout;
 
     @FXML
@@ -54,41 +54,93 @@ public class WorkdayController implements Initializable {
 
     @FXML
     private TableView<Event> tableEvents;
+
     @FXML
     private TableColumn<Event,String> columnName;
+
     @FXML
     private TableColumn<Event,Timestamp> columnStart;
+
     @FXML
     private TableColumn<Event,Timestamp> columnEndDate;
+
     @FXML
     private TableColumn<Event,Integer> columnTime;
 
-    private ObservableList<Event> data = FXCollections.observableArrayList();
-    private ConnectionManager myConn;
-    private Connection conn;
-    private ResultSet rs;
+    @FXML
+    private TableColumn<Event, Integer> columnIDEv;
 
-    private Employee loggedEmployee;
+    @FXML
+    private TableView<Task> tableViewTasks;
 
+    @FXML
+    private TableColumn<Task, Integer> columnID;
+
+    @FXML
+    private TableColumn<Task, String> columnTaskName;
+
+    @FXML
+    private TableColumn<Task, String> columnDescirption;
+
+    @FXML
+    private JFXDatePicker datePickerStartDate;
+
+    @FXML
+    private JFXTimePicker timePickerStartTime;
+
+    @FXML
+    private JFXDatePicker datePickerEndDate;
+
+    @FXML
+    private JFXTimePicker timePickerEndTime;
+
+    @FXML
+    private TextArea textAreaDisplayDescription;
 
     @Override
     public void initialize(URL location, ResourceBundle resources){
+        columnIDEv.setCellValueFactory(new PropertyValueFactory<>("idEvent"));
         columnName.setCellValueFactory(new PropertyValueFactory<>("task"));
         columnStart.setCellValueFactory(new PropertyValueFactory<>("startDate"));
         columnEndDate.setCellValueFactory(new PropertyValueFactory<>("endDate"));
         columnTime.setCellValueFactory(new PropertyValueFactory<>("time"));
+
+        columnID.setCellValueFactory(new PropertyValueFactory<>("idTask"));
+        columnTaskName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        columnDescirption.setCellValueFactory(new PropertyValueFactory<>("Descirption"));
+
+        timePickerStartTime.setIs24HourView(true);
+        timePickerStartTime.editableProperty().setValue(false);
+        timePickerEndTime.setIs24HourView(true);
+        timePickerEndTime.editableProperty().setValue(false);
+
+
+        loadEventData();
+        loadTasks();
+        initializeLoggedEmployeeData();
+
     }
 
-    private void loadDataFromDatabase(Employee loggedEmployee) throws ClassNotFoundException {
+    private void loadEventData() {
         try {
-            rs = ConnectionManager.dbExecuteQuery("SELECT task.name, Start, End, Time FROM event JOIN task ON event.idTask=task.idTask WHERE idEmployee="+loggedEmployee.getIdEmployee());
-            while(rs.next()) {
-                data.add(new Event(rs.getTimestamp("Start"),rs.getTimestamp("End"),rs.getInt("Time"), new Task(rs.getString("Name"))));
-            }
+            ObservableList<Event> eventData = EventDAO.searchEvents();
+            tableEvents.setItems(eventData);
         }catch(SQLException e){
                 e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
-        tableEvents.setItems(data);
+    }
+
+    private void loadTasks() {
+        try {
+            ObservableList<Task> taskData = TaskDAO.searchTasks();
+            tableViewTasks.setItems(taskData);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -96,11 +148,15 @@ public class WorkdayController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(LoginController.class.getResource("Login.fxml"));
             Parent root1 = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Login");
-            stage.setScene(new Scene(root1));
-            stage.setResizable(false);
-            stage.show();
+            Stage stageLogin = new Stage();
+
+            stageLogin.setTitle("Login");
+            stageLogin.setScene(new Scene(root1));
+            stageLogin.setResizable(false);
+            stageLogin.show();
+
+            StageManager.stages.add(stageLogin);
+            StageManager.closeStages(stageLogin);
             ((Node)(event.getSource())).getScene().getWindow().hide();
         } catch(Exception e) {
             e.printStackTrace();
@@ -113,39 +169,88 @@ public class WorkdayController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(ManageEmployeesController.class.getResource("../admin/ManageEmployees.fxml"));
             Parent root1 = fxmlLoader.load();
 
-            ManageEmployeesController manageEmployeesController = fxmlLoader.getController();
-            manageEmployeesController.setLoggedEmployee(loggedEmployee);
+            Stage stageEmployee = new Stage();
+            StageManager.stages.add(stageEmployee);
 
-            Stage stage = new Stage();
-            stage.setTitle("Employees");
-            stage.setScene(new Scene(root1));
-            stage.show();
-            stage.setResizable(false);
-            ((Node)(event.getSource())).getScene().getWindow().hide();
-        } catch(Exception e) {
+            stageEmployee.setTitle("Employees");
+            stageEmployee.setScene(new Scene(root1));
+            stageEmployee.show();
+            stageEmployee.setResizable(false);
+            stageEmployee.setOnCloseRequest(event1 -> StageManager.closeStages(stageEmployee));
+            ((Node) (event.getSource())).getScene().getWindow().hide();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void refresh(){
-        data.clear();
+    public void openTasksWindow(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(ManageEmployeesController.class.getResource("../admin/ManageTasks.fxml"));
+            Parent root1 = fxmlLoader.load();
+
+            Stage stageKeywords = new Stage();
+            StageManager.stages.add(stageKeywords);
+
+            stageKeywords.setTitle("Keywords");
+            stageKeywords.setScene(new Scene(root1));
+            stageKeywords.show();
+            stageKeywords.setResizable(false);
+            stageKeywords.setOnCloseRequest(event1 -> StageManager.closeStages(stageKeywords));
+            ((Node)(event.getSource())).getScene().getWindow().hide();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void add() {
+        LocalTime startTime = timePickerStartTime.getValue();
+        LocalDate startDate = datePickerStartDate.getValue();
+        String insertStart = startDate.toString() + " " + startTime.toString() + ":" + startTime.getSecond();
+        Timestamp start = Timestamp.valueOf(insertStart);
+
+        LocalTime endTime = timePickerEndTime.getValue();
+        LocalDate endDate = datePickerEndDate.getValue();
+        String insertEnd = endDate.toString() + " " + endTime.toString() + ":" + endTime.getSecond();
+        Timestamp end = Timestamp.valueOf(insertEnd);
+
+        int elapsedMinutes = (int) Duration.between(startTime, endTime).toMinutes();
+
+        Task selectedTask = tableViewTasks.getSelectionModel().getSelectedItem();
+
+        Event eventToInsert = new Event(start, end, elapsedMinutes, 0, Employee.loggedEmployee.getIdEmployee(), selectedTask);
+
+        tableEvents.getItems().add(eventToInsert);
+
+        EventDAO.insertEvent(eventToInsert);
     }
 
-    public void initializeLoggedEmployeeData(Employee loggedEmployee){
-        String loggedUser;
-        this.loggedEmployee=loggedEmployee;
+    @FXML
+    private void showDescription() {
+        if (Actions.validateSelections(tableViewTasks.getSelectionModel().getSelectedIndex())) {
+            Task description = tableViewTasks.getSelectionModel().getSelectedItem();
+            textAreaDisplayDescription.setText(description.getDescirption());
+        }
+    }
+
+    @FXML
+    private void deleteEvent() {
+        int idEventToDelete = tableEvents.getSelectionModel().getSelectedItem().getIdEvent();
         try {
-            loadDataFromDatabase(this.loggedEmployee);
+            System.out.println(idEventToDelete);
+            EventDAO.deleteEvent(idEventToDelete);
+        } catch (SQLException e) {
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        loggedUser = "Logged as: "+loggedEmployee.getName() + " " + loggedEmployee.getSurname();
-        loggedUserName.setText(loggedUser);
+        Event selectedEvent = tableEvents.getSelectionModel().getSelectedItem();
+        tableEvents.getItems().remove(selectedEvent);
     }
 
-    public void setLoggedEmployee(Employee loggedEmployee) {
-        this.loggedEmployee = loggedEmployee;
+    public void initializeLoggedEmployeeData() {
+        String loggedUser = "Logged as: " + Employee.loggedEmployee.getName() + " " + Employee.loggedEmployee.getSurname();
+        loggedUserName.setText(loggedUser);
     }
 
 }

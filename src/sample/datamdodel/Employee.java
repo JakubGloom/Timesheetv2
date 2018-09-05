@@ -9,6 +9,8 @@ public class Employee {
     private String access;
     private int seed;
 
+    public static Employee loggedEmployee;
+
     public Employee(){}
     public Employee(int idEmployee, String name, String surname, String login, String password) {
         this.idEmployee = idEmployee;

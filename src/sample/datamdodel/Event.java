@@ -1,7 +1,5 @@
 package sample.datamdodel;
 
-import javafx.fxml.FXML;
-
 import java.sql.Timestamp;
 
 public class Event {
@@ -14,10 +12,20 @@ public class Event {
     private int idTask;
     private Task task;
 
-    public Event(Timestamp startDate, Timestamp endDate, int time, Task task) {
+    public Event(int idEvent, Timestamp startDate, Timestamp endDate, int time, Task task) {
+        this.idEvent = idEvent;
         this.startDate = startDate;
         this.endDate = endDate;
         this.time = time;
+        this.task = task;
+    }
+
+    public Event(Timestamp startDate, Timestamp endDate, int time, int isAccepted, int idEmployee, Task task) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.time = time;
+        this.isAccepted = isAccepted;
+        this.idEmployee = idEmployee;
         this.task = task;
     }
 
@@ -83,5 +91,20 @@ public class Event {
 
     public void setTask(Task task) {
         this.task = task;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "idEvent=" + idEvent +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", time=" + time +
+                ", isAccepted=" + isAccepted +
+                ", idEmployee=" + idEmployee +
+                ", idTask=" + idTask +
+                ", task=" + task +
+                '}';
     }
 }

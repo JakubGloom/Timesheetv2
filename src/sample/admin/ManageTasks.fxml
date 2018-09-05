@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="407.0" prefWidth="641.0"
+            xmlns="http://javafx.com/javafx/8.0.121" fx:controller="sample.admin.ManageTasksController">
+    <children>
+        <VBox fx:id="vboxComoponents" layoutX="13.0" layoutY="22.0" prefHeight="377.0" prefWidth="177.0" spacing="25.0">
+            <children>
+                <TextField fx:id="textBoxName" prefHeight="25.0" prefWidth="177.0" promptText="Name"/>
+                <TextArea fx:id="textAreaDescription" prefHeight="200.0" prefWidth="200.0" promptText="Description"/>
+                <Button fx:id="buttonAdd" mnemonicParsing="false" onAction="#addTask" prefHeight="25.0"
+                        prefWidth="177.0" text="Add"/>
+                <Button fx:id="buttonRemove" mnemonicParsing="false" onAction="#deleteTask" prefHeight="25.0"
+                        prefWidth="177.0" text="Remove"/>
+                <Button fx:id="buttonEdit" mnemonicParsing="false" onAction="#openEditTask" prefHeight="25.0"
+                        prefWidth="177.0" text="Edit"/>
+                <Button fx:id="buttonLoad" mnemonicParsing="false" onAction="#loadTasks" prefHeight="25.0"
+                        prefWidth="177.0" text="Load"/>
+                <Button fx:id="buttonBack" mnemonicParsing="false" onAction="#openWorkdayScene" prefHeight="25.0"
+                        prefWidth="60.0" text="Back"/>
+            </children>
+        </VBox>
+        <TableView fx:id="tableViewTask" layoutX="207.0" layoutY="-1.0" onMouseClicked="#showDescription"
+                   prefHeight="408.0" prefWidth="243.0">
+            <columns>
+                <TableColumn fx:id="columnID" prefWidth="41.0" text="ID"/>
+                <TableColumn fx:id="columnName" prefWidth="201.0" text="Name"/>
+                <TableColumn fx:id="columnDescirption" minWidth="0.0" prefWidth="0.0" resizable="false"/>
+            </columns>
+        </TableView>
+        <VBox layoutX="450.0" layoutY="-1.0">
+            <children>
+                <TextArea fx:id="textAreaShowDescription" editable="false" prefHeight="408.0" prefWidth="200.0"/>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

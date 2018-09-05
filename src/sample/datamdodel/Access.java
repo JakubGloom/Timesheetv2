@@ -2,7 +2,8 @@ package sample.datamdodel;
 
 public enum Access {
     Employee(1),
-    Admin (2);
+    Moderator(2),
+    Admin(3);
 
     private int value;
 
@@ -12,9 +13,5 @@ public enum Access {
 
     public int getValue() {
         return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
     }
 }

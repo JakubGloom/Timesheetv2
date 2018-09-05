@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="276.0" prefWidth="204.0"
+            xmlns="http://javafx.com/javafx/8.0.121" fx:controller="sample.admin.EditTaskController">
+    <children>
+        <VBox fx:id="vboxComoponents" layoutX="13.0" layoutY="22.0" prefHeight="243.0" prefWidth="177.0" spacing="25.0">
+            <children>
+                <TextField fx:id="textBoxName" prefHeight="25.0" prefWidth="177.0" promptText="Name"/>
+                <TextArea fx:id="textAreaDescription" prefHeight="200.0" prefWidth="200.0" promptText="Description"/>
+                <Button fx:id="buttonConfirm" mnemonicParsing="false" onAction="#updateTask" prefHeight="25.0"
+                        prefWidth="177.0" text="Confirm"/>
+                <Button fx:id="buttonBack" mnemonicParsing="false" onAction="#backToManageTasks" prefHeight="25.0"
+                        prefWidth="60.0" text="Back"/>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

@@ -1,7 +1,5 @@
 package sample.admin;
 
-import javafx.application.Platform;
-import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,14 +12,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import sample.conectivity.ConnectionManager;
-import sample.datamdodel.*;
+import sample.datamdodel.Access;
+import sample.datamdodel.Employee;
+import sample.datamdodel.EmployeeDAO;
+import sample.datamdodel.StageManager;
 import sample.worksheet.WorkdayController;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
@@ -57,8 +55,6 @@ public class ManageEmployeesController implements Initializable {
     @FXML
     private TableColumn<Employee, Integer> columnAccess;
 
-    private Employee loggedEmployee;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         choiceBoxAccountType.setItems(FXCollections.observableArrayList(Access.values()));
@@ -93,12 +89,12 @@ public class ManageEmployeesController implements Initializable {
             Parent root = loader.load();
 
             WorkdayController workdayController =loader.getController();
-            workdayController.initializeLoggedEmployeeData(loggedEmployee);
-            workdayController.setLoggedEmployee(loggedEmployee);
+            workdayController.initializeLoggedEmployeeData();
 
-            Stage stage=new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
+            Stage stageWorkday = new Stage();
+            stageWorkday.setScene(new Scene(root));
+            StageManager.closeStages(stageWorkday);
+            stageWorkday.show();
             ((Node)(event.getSource())).getScene().getWindow().hide();
         } catch (IOException e) {
             e.printStackTrace();
@@ -116,10 +112,11 @@ public class ManageEmployeesController implements Initializable {
                 EditEmployeeController editEmployeeController = loader.getController();
                 editEmployeeController.initializeToEdit(toEditEmployee);
 
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root));
-                stage.setResizable(false);
-                stage.show();
+                Stage editStage = new Stage();
+                StageManager.stages.add(editStage);
+                editStage.setScene(new Scene(root));
+                editStage.setResizable(false);
+                editStage.show();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -174,10 +171,6 @@ public class ManageEmployeesController implements Initializable {
             return false;
         }
         return true;
-    }
-
-    public void setLoggedEmployee(Employee loggedEmployee) {
-        this.loggedEmployee = loggedEmployee;
     }
 
 }
