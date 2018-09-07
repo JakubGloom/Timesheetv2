@@ -1,7 +1,6 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,7 +12,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("worksheet/Login.fxml"));
         primaryStage.setTitle("login");
-        primaryStage.setScene(new Scene(root, 350, 150));
+        primaryStage.setScene(new Scene(root, 420, 215));
         primaryStage.resizableProperty().setValue(false);
         primaryStage.show();
 

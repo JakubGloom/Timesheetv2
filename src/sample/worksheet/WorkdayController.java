@@ -114,16 +114,20 @@ public class WorkdayController implements Initializable {
         timePickerEndTime.setIs24HourView(true);
         timePickerEndTime.editableProperty().setValue(false);
 
+        LocalDate localDate = LocalDate.now();
+        System.out.println(localDate);
 
-        loadEventData();
-        loadTasks();
+        Thread event  = new Thread(() -> loadEventData(localDate));
+        event.start();
+        Thread task  = new Thread(() -> loadTasks());
+        task.start();
         initializeLoggedEmployeeData();
 
     }
 
-    private void loadEventData() {
+    private void loadEventData(LocalDate localDate) {
         try {
-            ObservableList<Event> eventData = EventDAO.searchEvents();
+            ObservableList<Event> eventData = EventDAO.searchEvents(localDate);
             tableEvents.setItems(eventData);
         }catch(SQLException e){
                 e.printStackTrace();
@@ -204,33 +208,39 @@ public class WorkdayController implements Initializable {
     }
     @FXML
     private void add() {
-        LocalTime startTime = timePickerStartTime.getValue();
-        LocalDate startDate = datePickerStartDate.getValue();
-        String insertStart = startDate.toString() + " " + startTime.toString() + ":" + startTime.getSecond();
-        Timestamp start = Timestamp.valueOf(insertStart);
+        if (validateFields()){
+            LocalTime startTime = timePickerStartTime.getValue();
+            LocalDate startDate = datePickerStartDate.getValue();
+            String insertStart = startDate.toString() + " " + startTime.toString() + ":" + startTime.getSecond();
+            Timestamp start = Timestamp.valueOf(insertStart);
 
-        LocalTime endTime = timePickerEndTime.getValue();
-        LocalDate endDate = datePickerEndDate.getValue();
-        String insertEnd = endDate.toString() + " " + endTime.toString() + ":" + endTime.getSecond();
-        Timestamp end = Timestamp.valueOf(insertEnd);
+            LocalTime endTime = timePickerEndTime.getValue();
+            LocalDate endDate = datePickerEndDate.getValue();
+            String insertEnd = endDate.toString() + " " + endTime.toString() + ":" + endTime.getSecond();
+            Timestamp end = Timestamp.valueOf(insertEnd);
+            if (start.before(end)) {
+                int elapsedMinutes = (int) Duration.between(startTime, endTime).toMinutes();
 
-        int elapsedMinutes = (int) Duration.between(startTime, endTime).toMinutes();
+                Task selectedTask = tableViewTasks.getSelectionModel().getSelectedItem();
 
-        Task selectedTask = tableViewTasks.getSelectionModel().getSelectedItem();
+                Event eventToInsert = new Event(start, end, elapsedMinutes, 0, Employee.loggedEmployee.getIdEmployee(), selectedTask);
 
-        Event eventToInsert = new Event(start, end, elapsedMinutes, 0, Employee.loggedEmployee.getIdEmployee(), selectedTask);
+                tableEvents.getItems().add(eventToInsert);
 
-        tableEvents.getItems().add(eventToInsert);
-
-        EventDAO.insertEvent(eventToInsert);
+                EventDAO.insertEvent(eventToInsert);
+            }
+            else{Actions.showAlert("Wrong data input");}
+        }
     }
 
     @FXML
-    private void showDescription() {
+    private boolean showDescription() {
         if (Actions.validateSelections(tableViewTasks.getSelectionModel().getSelectedIndex())) {
             Task description = tableViewTasks.getSelectionModel().getSelectedItem();
             textAreaDisplayDescription.setText(description.getDescirption());
+            return true;
         }
+        return false;
     }
 
     @FXML
@@ -253,4 +263,11 @@ public class WorkdayController implements Initializable {
         loggedUserName.setText(loggedUser);
     }
 
+    private boolean validateFields(){
+        if (showDescription()&&datePickerStartDate!=null&&datePickerEndDate!=null&&timePickerStartTime!=null&&timePickerEndTime!=null){
+            return true;
+        }
+        Actions.showAlert("Fill the required data");
+        return false;
+    }
 }

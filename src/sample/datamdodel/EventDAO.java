@@ -6,6 +6,7 @@ import sample.conectivity.ConnectionManager;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class EventDAO {
 
@@ -32,10 +33,12 @@ public class EventDAO {
         }
     }
 
-    public static ObservableList<Event> searchEvents() throws SQLException, ClassNotFoundException {
+    public static ObservableList<Event> searchEvents(LocalDate localDate) throws SQLException, ClassNotFoundException {
 
         String selectStmt = "SELECT idEvent, task.name, Start, End, Time FROM event " +
-                "JOIN task ON event.idTask=task.idTask WHERE idEmployee=" + Employee.loggedEmployee.getIdEmployee();
+                "JOIN task ON event.idTask=task.idTask WHERE idEmployee=" + Employee.loggedEmployee.getIdEmployee()+
+                " AND " + "Start>=" +"'"+ localDate + " 00:00:00' "
+                + "AND " + "End<=" +"'"+ localDate + " 23:59:59'";
         try {
             ResultSet rsTasks = ConnectionManager.dbExecuteQuery(selectStmt);
 

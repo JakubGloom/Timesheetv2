@@ -1,14 +1,15 @@
 package sample.worksheet;
 
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import sample.conectivity.ConnectionManager;
 import sample.datamdodel.Employee;
@@ -16,11 +17,13 @@ import sample.datamdodel.EmployeeDAO;
 import sample.datamdodel.StageManager;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
-public class LoginController {
+public class LoginController implements Initializable {
 
     private ConnectionManager connection = new ConnectionManager();
     private boolean noConnection;
@@ -28,12 +31,18 @@ public class LoginController {
 
     @FXML
     private Label labelDisplayStatus;
+
     @FXML
-    private PasswordField passwordFieldPassword;
+    private JFXTextField textFieldLogin;
+
     @FXML
-    private TextField textFieldLogin;
+    private JFXPasswordField passwordFieldPassword;
 
     private ResultSet result;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+    }
 
     @FXML
     public void onButtonClicked(ActionEvent event) {
