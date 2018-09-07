@@ -2,8 +2,10 @@ package sample.datamdodel;
 
 import javafx.scene.control.Alert;
 
-public class Actions {
+import java.time.format.DateTimeFormatter;
 
+public class Actions {
+    public static DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH/mm");
     public static void showAlert(String massage) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Warning");

@@ -116,10 +116,8 @@ public class WorkdayController implements Initializable {
         localDate = LocalDate.now();
         System.out.println(localDate);
 
-        Thread event  = new Thread(() -> loadEventData(localDate));
-        event.start();
-        Thread task  = new Thread(() -> loadTasks());
-        task.start();
+        loadEventData(localDate);
+        loadTasks();
         initializeLoggedEmployeeData();
 
 
@@ -227,7 +225,7 @@ public class WorkdayController implements Initializable {
 
                 EventDAO.insertEvent(eventToInsert);
             }
-            else{Actions.showAlert("Wrong data input");}
+            else{Actions.showAlert("Wrong time input");}
         }
     }
 
@@ -266,10 +264,15 @@ public class WorkdayController implements Initializable {
     }
 
     private boolean validateFields(){
-        if (showDescription()&&timePickerStartTime!=null&&timePickerEndTime!=null){
+        if (timePickerStartTime.getValue()!=null&&timePickerEndTime.getValue()!=null&&showDescription()){
             return true;
         }
         Actions.showAlert("Fill the required data");
         return false;
+    }
+
+    @FXML
+    private void checkEvents(){
+        EventDAO.checkCurrentEvents(tableEvents);
     }
 }

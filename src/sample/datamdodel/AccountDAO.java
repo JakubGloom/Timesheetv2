@@ -1,11 +1,6 @@
 package sample.datamdodel;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import sample.conectivity.ConnectionManager;
-
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 
 

@@ -1,8 +1,8 @@
 package sample.conectivity;
 
-import java.sql.*;
-
 import com.sun.rowset.CachedRowSetImpl;
+
+import java.sql.*;
 
 public class ConnectionManager{
     private static final String url = "jdbc:mysql://localhost:3306/databasetests?useSSL=false";

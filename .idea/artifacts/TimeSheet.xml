@@ -5,11 +5,13 @@
       <options>
         <option name="appClass" value="sample.Main" />
         <option name="description" value="" />
+        <option name="height" value="215" />
         <option name="htmlPlaceholderId" value="" />
         <option name="nativeBundle" value="all" />
         <option name="title" value="TimeSheet" />
         <option name="vendor" value="" />
         <option name="version" value="" />
+        <option name="width" value="420" />
       </options>
     </properties>
     <root id="root">

@@ -2,6 +2,7 @@ package sample.datamdodel;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
 import sample.conectivity.ConnectionManager;
 
 import java.sql.ResultSet;
@@ -36,9 +37,9 @@ public class EventDAO {
     public static ObservableList<Event> searchEvents(LocalDate localDate) throws SQLException, ClassNotFoundException {
 
         String selectStmt = "SELECT idEvent, task.name, Start, End, Time FROM event " +
-                "JOIN task ON event.idTask=task.idTask WHERE idEmployee=" + Employee.loggedEmployee.getIdEmployee()+
-                " AND " + "Start>=" +"'"+ localDate + " 00:00:00' "
-                + "AND " + "End<=" +"'"+ localDate + " 23:59:59'";
+                "JOIN task ON event.idTask=task.idTask WHERE idEmployee=" + Employee.loggedEmployee.getIdEmployee() +
+                " AND " + "Start>=" + "'" + localDate + " 00:00:00' "
+                + "AND " + "End<=" + "'" + localDate + " 23:59:59'";
         try {
             ResultSet rsTasks = ConnectionManager.dbExecuteQuery(selectStmt);
 
@@ -52,7 +53,6 @@ public class EventDAO {
     }
 
     private static ObservableList<Event> getEventList(ResultSet rs) throws SQLException {
-
         ObservableList<Event> eventList = FXCollections.observableArrayList();
 
         while (rs.next()) {
@@ -61,5 +61,19 @@ public class EventDAO {
             eventList.add(event);
         }
         return eventList;
+    }
+
+    public static boolean checkCurrentEvents(TableView<Event> tableView) {
+        int count = 0;
+        for (int i = 0; i < tableView.getItems().size(); i++) {
+            if (tableView.getItems().get(i).getEndDate() == null)
+                count++;
+        }
+        if(count!=0) {
+            Actions.showAlert("You have: " + count + "unclosed events");
+            return false;
+        }
+        Actions.showAlert("Every event is closed");
+        return true;
     }
 }
