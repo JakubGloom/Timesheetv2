@@ -8,26 +8,39 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<AnchorPane id="loginAnchorPane" fx:id="loginAnchorPane" prefHeight="215.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.worksheet.LoginController">
+<?import javafx.scene.text.Font?>
+<AnchorPane id="loginAnchorPane" fx:id="loginAnchorPane" prefHeight="215.0" prefWidth="400.0" stylesheets="@../CSS/Login.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.worksheet.LoginController">
    <children>
       <VBox layoutX="86.0" layoutY="22.0" spacing="25.0">
          <children>
             <HBox>
                <children>
-                  <Label id="labelStatus" fx:id="labelStatus" prefHeight="17.0" prefWidth="54.0" text="Status:" textAlignment="CENTER" textOverrun="CLIP" />
+                  <Label id="labelStatus" fx:id="labelStatus" prefHeight="17.0" prefWidth="54.0" text="Status:" textAlignment="CENTER" textOverrun="CLIP">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
                   <Label id="labelDisplayStatus" fx:id="labelDisplayStatus" prefHeight="17.0" prefWidth="171.0" />
                </children>
             </HBox>
-            <JFXTextField fx:id="textFieldLogin" alignment="CENTER" labelFloat="true" prefHeight="0.0" prefWidth="229.0" promptText="Login" unFocusColor="#372df1" />
-            <JFXPasswordField fx:id="passwordFieldPassword" alignment="CENTER" labelFloat="true" prefHeight="0.0" prefWidth="229.0" promptText="Password" unFocusColor="#372df1" />
+            <JFXTextField fx:id="textFieldLogin" alignment="CENTER" focusColor="BLACK" labelFloat="true" prefHeight="0.0" prefWidth="229.0" promptText="Login" unFocusColor="BLACK">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></JFXTextField>
+            <JFXPasswordField fx:id="passwordFieldPassword" alignment="CENTER" focusColor="BLACK" labelFloat="true" prefHeight="0.0" prefWidth="229.0" promptText="Password" unFocusColor="BLACK">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font></JFXPasswordField>
          </children>
          <opaqueInsets>
             <Insets bottom="5.0" />
          </opaqueInsets>
       </VBox>
-      <JFXButton fx:id="buttonLogin" layoutX="163.0" layoutY="171.0" onAction="#onButtonClicked" prefHeight="25.0" prefWidth="76.0" ripplerFill="#4059a9" text="Login" />
+      <JFXButton fx:id="buttonLogin" layoutX="163.0" layoutY="171.0" onAction="#onButtonClicked" prefHeight="25.0" prefWidth="76.0" ripplerFill="#a80505" text="Login">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></JFXButton>
    </children>
    <padding>
-      <Insets bottom="10.0" right="10.0" top="10.0" />
+      <Insets bottom="10.0" top="10.0" />
    </padding>
 </AnchorPane>

@@ -1,6 +1,5 @@
 package sample.worksheet;
 
-import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,6 +26,12 @@ import java.util.ResourceBundle;
 public class WorkdayController implements Initializable {
     @FXML
     private Label loggedUserName;
+
+    @FXML
+    private Label labelDate;
+
+    @FXML
+    private Label labelToday;
 
     @FXML
     private Button buttonReport;
@@ -83,20 +88,14 @@ public class WorkdayController implements Initializable {
     private TableColumn<Task, String> columnDescirption;
 
     @FXML
-    private JFXDatePicker datePickerStartDate;
-
-    @FXML
     private JFXTimePicker timePickerStartTime;
-
-    @FXML
-    private JFXDatePicker datePickerEndDate;
 
     @FXML
     private JFXTimePicker timePickerEndTime;
 
     @FXML
     private TextArea textAreaDisplayDescription;
-
+    private static LocalDate localDate;
     @Override
     public void initialize(URL location, ResourceBundle resources){
         columnIDEv.setCellValueFactory(new PropertyValueFactory<>("idEvent"));
@@ -114,7 +113,7 @@ public class WorkdayController implements Initializable {
         timePickerEndTime.setIs24HourView(true);
         timePickerEndTime.editableProperty().setValue(false);
 
-        LocalDate localDate = LocalDate.now();
+        localDate = LocalDate.now();
         System.out.println(localDate);
 
         Thread event  = new Thread(() -> loadEventData(localDate));
@@ -122,6 +121,7 @@ public class WorkdayController implements Initializable {
         Thread task  = new Thread(() -> loadTasks());
         task.start();
         initializeLoggedEmployeeData();
+
 
     }
 
@@ -210,13 +210,11 @@ public class WorkdayController implements Initializable {
     private void add() {
         if (validateFields()){
             LocalTime startTime = timePickerStartTime.getValue();
-            LocalDate startDate = datePickerStartDate.getValue();
-            String insertStart = startDate.toString() + " " + startTime.toString() + ":" + startTime.getSecond();
+            String insertStart = localDate.toString() + " " + startTime.toString() + ":" + startTime.getSecond();
             Timestamp start = Timestamp.valueOf(insertStart);
 
             LocalTime endTime = timePickerEndTime.getValue();
-            LocalDate endDate = datePickerEndDate.getValue();
-            String insertEnd = endDate.toString() + " " + endTime.toString() + ":" + endTime.getSecond();
+            String insertEnd = localDate.toString() + " " + endTime.toString() + ":" + endTime.getSecond();
             Timestamp end = Timestamp.valueOf(insertEnd);
             if (start.before(end)) {
                 int elapsedMinutes = (int) Duration.between(startTime, endTime).toMinutes();
@@ -260,11 +258,15 @@ public class WorkdayController implements Initializable {
 
     public void initializeLoggedEmployeeData() {
         String loggedUser = "Logged as: " + Employee.loggedEmployee.getName() + " " + Employee.loggedEmployee.getSurname();
+        String today = "Today is: ";
+        String date = String.valueOf(localDate);
         loggedUserName.setText(loggedUser);
+        labelToday.setText(today);
+        labelDate.setText(date);
     }
 
     private boolean validateFields(){
-        if (showDescription()&&datePickerStartDate!=null&&datePickerEndDate!=null&&timePickerStartTime!=null&&timePickerEndTime!=null){
+        if (showDescription()&&timePickerStartTime!=null&&timePickerEndTime!=null){
             return true;
         }
         Actions.showAlert("Fill the required data");
