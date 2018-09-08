@@ -12,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import sample.admin.ManageEmployeesController;
 import sample.datamdodel.*;
 
 import java.net.URL;
@@ -168,7 +167,7 @@ public class WorkdayController implements Initializable {
     @FXML
     public void openEmployeesWindow(ActionEvent event){
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(ManageEmployeesController.class.getResource("../admin/ManageEmployees.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../admin/ManageEmployees.fxml"));
             Parent root1 = fxmlLoader.load();
 
             Stage stageEmployee = new Stage();
@@ -188,7 +187,7 @@ public class WorkdayController implements Initializable {
     @FXML
     public void openTasksWindow(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(ManageEmployeesController.class.getResource("../admin/ManageTasks.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../admin/ManageTasks.fxml"));
             Parent root1 = fxmlLoader.load();
 
             Stage stageKeywords = new Stage();
