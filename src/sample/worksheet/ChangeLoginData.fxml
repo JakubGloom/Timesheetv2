@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<AnchorPane prefHeight="213.0" prefWidth="205.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.worksheet.ChangeLoginDataController">
+   <children>
+      <VBox layoutX="35.0" layoutY="14.0" spacing="10.0">
+         <children>
+            <JFXPasswordField fx:id="passwordFieldOldPassword" alignment="CENTER" promptText="Old password" />
+            <JFXPasswordField fx:id="passwordFieldNewPassword" alignment="CENTER" promptText="New password" />
+            <JFXPasswordField fx:id="passwordFieldRepeat" alignment="CENTER" promptText="Repeat new password" />
+         </children>
+      </VBox>
+      <JFXTextField fx:id="textFieldNewLogin" alignment="CENTER" layoutX="36.0" layoutY="138.0" text="New login" />
+      <JFXButton fx:id="buttonChange" layoutX="57.0" layoutY="178.0" onAction="#change" prefHeight="25.0" prefWidth="92.0" ripplerFill="#4059a9" text="Change" />
+   </children>
+</AnchorPane>

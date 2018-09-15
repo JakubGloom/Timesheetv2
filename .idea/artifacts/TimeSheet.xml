@@ -18,6 +18,8 @@
       <element id="archive" name="TimeSheet.jar">
         <element id="module-output" name="TimeSheet" />
       </element>
+      <element id="file-copy" path="$PROJECT_DIR$/../jfoenix-9.0.6.jar" />
+      <element id="library" level="project" name="mysql-connector-java-5.1.46 " />
     </root>
   </artifact>
 </component>

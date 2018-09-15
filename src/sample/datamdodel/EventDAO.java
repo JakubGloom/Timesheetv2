@@ -11,17 +11,18 @@ import java.time.LocalDate;
 
 public class EventDAO {
 
-    public static void insertEvent(Event eventToInsert) {
+    public static void insertEvent(Event eventToInsert) throws SQLException, ClassNotFoundException {
         String insertEvent = "INSERT INTO `databasetests`.`event` (`Start`, `End`, `Time`, `IsAccepted`, `idEmployee`, `idTask`) " +
                 "VALUES ('" + eventToInsert.getStartDate() + "', '" + eventToInsert.getEndDate() + "', '" + eventToInsert.getTime() + "', " +
                 "'" + eventToInsert.getIsAccepted() + "', '" + eventToInsert.getIdEmployee() + "', '" + eventToInsert.getTask().getIdTask() + "')";
-        try {
-            ConnectionManager.dbExecuteUpdate(insertEvent);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            try {
+                ConnectionManager.dbExecuteUpdate(insertEvent);
+            }
+            catch (SQLException e){
+            System.out.print("Error occurred while INSERT Operation: " + e);
+            throw e;
         }
+
     }
 
     public static void deleteEvent(int idEvent) throws SQLException, ClassNotFoundException {

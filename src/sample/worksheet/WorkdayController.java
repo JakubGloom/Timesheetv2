@@ -1,5 +1,6 @@
 package sample.worksheet;
 
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,6 +24,7 @@ import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class WorkdayController implements Initializable {
+
     @FXML
     private Label loggedUserName;
 
@@ -31,6 +33,9 @@ public class WorkdayController implements Initializable {
 
     @FXML
     private Label labelToday;
+
+    @FXML
+    private Button buttonChange;
 
     @FXML
     private Button buttonReport;
@@ -93,8 +98,12 @@ public class WorkdayController implements Initializable {
     private JFXTimePicker timePickerEndTime;
 
     @FXML
+    private JFXDatePicker datePickerAnotherDay;
+
+    @FXML
     private TextArea textAreaDisplayDescription;
     private static LocalDate localDate;
+
     @Override
     public void initialize(URL location, ResourceBundle resources){
         columnIDEv.setCellValueFactory(new PropertyValueFactory<>("idEvent"));
@@ -118,8 +127,6 @@ public class WorkdayController implements Initializable {
         loadEventData(localDate);
         loadTasks();
         initializeLoggedEmployeeData();
-
-
     }
 
     private void loadEventData(LocalDate localDate) {
@@ -167,7 +174,7 @@ public class WorkdayController implements Initializable {
     @FXML
     public void openEmployeesWindow(ActionEvent event){
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../admin/ManageEmployees.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ManageEmployees.fxml"));
             Parent root1 = fxmlLoader.load();
 
             Stage stageEmployee = new Stage();
@@ -187,7 +194,7 @@ public class WorkdayController implements Initializable {
     @FXML
     public void openTasksWindow(ActionEvent event) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../admin/ManageTasks.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ManageTasks.fxml"));
             Parent root1 = fxmlLoader.load();
 
             Stage stageKeywords = new Stage();
@@ -204,6 +211,24 @@ public class WorkdayController implements Initializable {
         }
     }
     @FXML
+    private void changeLoginData(ActionEvent event){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ChangeLoginData.fxml"));
+            Parent root1 = fxmlLoader.load();
+
+            Stage stageChangeLoginData = new Stage();
+            StageManager.stages.add(stageChangeLoginData);
+
+            stageChangeLoginData.setTitle("Keywords");
+            stageChangeLoginData.setScene(new Scene(root1));
+            stageChangeLoginData.show();
+            stageChangeLoginData.setResizable(false);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    @FXML
     private void add() {
         if (validateFields()){
             LocalTime startTime = timePickerStartTime.getValue();
@@ -213,7 +238,16 @@ public class WorkdayController implements Initializable {
             LocalTime endTime = timePickerEndTime.getValue();
             String insertEnd = localDate.toString() + " " + endTime.toString() + ":" + endTime.getSecond();
             Timestamp end = Timestamp.valueOf(insertEnd);
-            if (start.before(end)) {
+
+            Timestamp lastAdded = start;
+
+            if (!tableEvents.getItems().isEmpty()) {
+                int lastIndex = tableEvents.getItems().size()-1;
+                lastAdded = tableEvents.getItems().get(lastIndex).getEndDate();
+                System.out.println(lastIndex);
+            }
+
+            if (start.before(end)&&(start.after(lastAdded)||start.equals(lastAdded))) {
                 int elapsedMinutes = (int) Duration.between(startTime, endTime).toMinutes();
 
                 Task selectedTask = tableViewTasks.getSelectionModel().getSelectedItem();
@@ -222,7 +256,6 @@ public class WorkdayController implements Initializable {
 
                 tableEvents.getItems().add(eventToInsert);
 
-                EventDAO.insertEvent(eventToInsert);
             }
             else{Actions.showAlert("Wrong time input");}
         }
@@ -274,4 +307,11 @@ public class WorkdayController implements Initializable {
     private void checkEvents(){
         EventDAO.checkCurrentEvents(tableEvents);
     }
+
+    @FXML
+    private void loadAnotherDay(){
+        localDate = datePickerAnotherDay.getValue();
+        loadEventData(localDate);
+    }
+
 }

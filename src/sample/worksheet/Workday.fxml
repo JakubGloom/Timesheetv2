@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTimePicker?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
@@ -20,15 +21,29 @@
    <center>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <VBox layoutX="303.0" layoutY="46.0" spacing="10.0">
+            <VBox layoutX="303.0" layoutY="110.0" prefHeight="71.0" prefWidth="75.0" spacing="10.0">
                <children>
                    <Button fx:id="buttonAdd" mnemonicParsing="false" onAction="#add" prefHeight="25.0" prefWidth="75.0" text="Add" />
                    <Button fx:id="buttonRemove" mnemonicParsing="false" onAction="#deleteEvent" prefHeight="25.0" prefWidth="75.0" text="Remove" />
                </children>
             </VBox>
-             <Button fx:id="btnLogout" layoutX="303.0" layoutY="561.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="75.0" text="Logout" />
-            <Button fx:id="btnSend" layoutX="103.0" layoutY="561.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Send" />
-            <Button fx:id="btnCheck" layoutX="14.0" layoutY="561.0" mnemonicParsing="false" onAction="#checkEvents" prefHeight="25.0" prefWidth="75.0" text="Check" />
+            <VBox layoutX="303.0" layoutY="508.0" spacing="11.0">
+               <children>
+                  <VBox>
+                     <children>
+                        <Label fx:id="lableLoginData" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="75.0" text="login data">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="buttonChange" mnemonicParsing="false" onAction="#changeLoginData" prefHeight="25.0" prefWidth="75.0" text="Change" />
+                     </children>
+                  </VBox>
+                   <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="75.0" text="Logout" />
+               </children>
+            </VBox>
+            <Button fx:id="btnSend" layoutX="104.0" layoutY="561.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Send" />
+            <Button fx:id="btnCheck" layoutX="15.0" layoutY="561.0" mnemonicParsing="false" onAction="#checkEvents" prefHeight="25.0" prefWidth="75.0" text="Check" />
             <VBox layoutX="303.0" layoutY="246.0" spacing="10.0">
                <children>
                   <Button fx:id="buttonEmployees" mnemonicParsing="false" onAction="#openEmployeesWindow" prefHeight="25.0" prefWidth="75.0" text="Employees" />
@@ -36,12 +51,22 @@
                   <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Report" />
                </children>
             </VBox>
-             <VBox layoutX="14.0" layoutY="46.0" prefHeight="499.0" prefWidth="275.0" spacing="20.0">
+             <VBox layoutX="14.0" layoutY="41.0" prefHeight="504.0" prefWidth="276.0" spacing="20.0">
                  <children>
-                     <TableView fx:id="tableViewTasks" onMouseClicked="#showDescription" prefHeight="256.0" prefWidth="275.0">
+                  <VBox prefHeight="39.0" prefWidth="276.0">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="106.0" text="Pick date to load: ">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <JFXDatePicker fx:id="datePickerAnotherDay" editable="false" onAction="#loadAnotherDay" prefHeight="9.0" prefWidth="182.0" />
+                     </children>
+                  </VBox>
+                     <TableView fx:id="tableViewTasks" onMouseClicked="#showDescription" prefHeight="256.0" prefWidth="276.0">
                          <columns>
                              <TableColumn fx:id="columnID" minWidth="0.0" prefWidth="0.0" text="idTask" visible="false" />
-                             <TableColumn fx:id="columnTaskName" maxWidth="273.0" minWidth="273.0" prefWidth="273.0" resizable="false" text="Task Name" />
+                             <TableColumn fx:id="columnTaskName" maxWidth="273.0" minWidth="274.0" prefWidth="273.0" resizable="false" text="Task Name" />
                              <TableColumn fx:id="columnDescirption" minWidth="0.0" prefWidth="0.0" text="Description" visible="false" />
                          </columns>
                      </TableView>

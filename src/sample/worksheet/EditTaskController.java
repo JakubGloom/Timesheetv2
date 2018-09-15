@@ -1,4 +1,4 @@
-package sample.admin;
+package sample.worksheet;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

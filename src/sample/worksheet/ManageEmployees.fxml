@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<AnchorPane prefHeight="407.0" prefWidth="781.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.admin.ManageEmployeesController">
+<AnchorPane prefHeight="407.0" prefWidth="781.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.worksheet.ManageEmployeesController">
    <children>
       <VBox fx:id="vboxComoponents" layoutX="13.0" layoutY="22.0" prefHeight="336.0" prefWidth="177.0" spacing="25.0">
          <children>

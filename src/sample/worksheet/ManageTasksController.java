@@ -1,4 +1,4 @@
-package sample.admin;
+package sample.worksheet;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -77,7 +77,7 @@ public class ManageTasksController implements Initializable {
     private void openWorkdayScene(ActionEvent event) {
         try {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../worksheet/Workday.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Workday.fxml"));
             Parent root = loader.load();
 
             Stage stageWorkday = new Stage();
@@ -97,7 +97,7 @@ public class ManageTasksController implements Initializable {
         selection = tableViewTask.getSelectionModel().getSelectedIndex();
         if (Actions.validateSelections(selection)) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("../admin/EditTask.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("EditTask.fxml"));
                 Parent root = loader.load();
 
                 EditTaskController editTaskController = loader.getController();

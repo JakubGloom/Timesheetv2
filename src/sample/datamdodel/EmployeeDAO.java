@@ -153,4 +153,43 @@ private static StringBuilder stringBuilder;
         }
 
     }
+
+    public static void updateEmployeePasswordAndLogin(String login, String password){
+
+        String updateStmt = "UPDATE employee` SET `Login` = '"+login+"', `Password` = '"+password+"' WHERE (`idEmployee` = '"+Employee.loggedEmployee.getIdEmployee()+"')";
+
+        try {
+            ConnectionManager.dbExecuteUpdate(updateStmt);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateEmployeeLogin(String login){
+
+        String updateStmt = "UPDATE employee` SET `Login` = '"+login+"' WHERE (`idEmployee` = '"+Employee.loggedEmployee.getIdEmployee()+"')";
+
+        try {
+            ConnectionManager.dbExecuteUpdate(updateStmt);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateEmployeePassword(String password){
+
+        String updateStmt = "UPDATE employee` SET ``Password` = '"+password+"' WHERE (`idEmployee` = '"+Employee.loggedEmployee.getIdEmployee()+"')";
+
+        try {
+            ConnectionManager.dbExecuteUpdate(updateStmt);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }

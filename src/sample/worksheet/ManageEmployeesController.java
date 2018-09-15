@@ -1,4 +1,4 @@
-package sample.admin;
+package sample.worksheet;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,7 +16,6 @@ import sample.datamdodel.Access;
 import sample.datamdodel.Employee;
 import sample.datamdodel.EmployeeDAO;
 import sample.datamdodel.StageManager;
-import sample.worksheet.WorkdayController;
 
 import java.io.IOException;
 import java.net.URL;
@@ -85,7 +84,7 @@ public class ManageEmployeesController implements Initializable {
     private void openWorkdayScene(ActionEvent event){
         try {
 
-            FXMLLoader loader=new FXMLLoader(getClass().getResource("../worksheet/Workday.fxml"));
+            FXMLLoader loader=new FXMLLoader(getClass().getResource("Workday.fxml"));
             Parent root = loader.load();
 
             WorkdayController workdayController =loader.getController();
@@ -106,7 +105,7 @@ public class ManageEmployeesController implements Initializable {
         Employee toEditEmployee = tableViewEmployees.getSelectionModel().getSelectedItem();
         if(validateSelections()) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("../admin/EditEmployee.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("EditEmployee.fxml"));
                 Parent root = loader.load();
 
                 EditEmployeeController editEmployeeController = loader.getController();

@@ -1,4 +1,4 @@
-package sample.admin;
+package sample.worksheet;
 
 public class ReportController {
 }
