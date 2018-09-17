@@ -8,6 +8,7 @@ public class Employee {
     private String password;
     private String access;
     private int seed;
+    private String fullName;
 
     public static Employee loggedEmployee;
 
@@ -27,6 +28,13 @@ public class Employee {
         this.login = login;
         this.password = password;
         this.access = access;
+    }
+
+    public Employee(int idEmployee, String name, String surname) {
+        this.idEmployee = idEmployee;
+        this.name = name;
+        this.surname = surname;
+        this.fullName = name + " " + surname;
     }
 
     public int getIdEmployee() {
@@ -85,6 +93,13 @@ public class Employee {
         this.seed = seed;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
     @Override
     public String toString() {

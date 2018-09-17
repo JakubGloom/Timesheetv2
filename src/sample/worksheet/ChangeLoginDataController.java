@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import sample.datamdodel.Actions;
 import sample.datamdodel.Employee;
+import sample.datamdodel.EmployeeDAO;
 
 public class ChangeLoginDataController {
     @FXML
@@ -21,14 +22,19 @@ public class ChangeLoginDataController {
 
     @FXML
     private void change(){
-        if (validateOldPassword()){
-            if (validateNewPasswords()){
-                if (isNewLogin()){
-
-                }
-                else{
-
-                }
+        if (validateOldPassword()&& validateNewPasswords()) {
+            if (isNewLogin()) {
+                EmployeeDAO.updateEmployeePasswordAndLogin(textFieldNewLogin.getText(), passwordFieldNewPassword.getText());
+                Actions.showInfo("Successfully changed to a new password and login");
+            }else{
+                EmployeeDAO.updateEmployeePassword(passwordFieldNewPassword.getText());
+                Actions.showInfo("Successfully changed to a new password");
+            }
+        }
+        else{
+            if (isNewLogin()){
+                EmployeeDAO.updateEmployeeLogin(textFieldNewLogin.getText());
+                Actions.showInfo("Successfully changed to a new login");
             }
         }
     }
@@ -48,8 +54,13 @@ public class ChangeLoginDataController {
     }
 
     private boolean validateNewPasswords(){
-        if (passwordFieldNewPassword.getText().equals(passwordFieldRepeat.getText())) {
-            return true;
+        if (!passwordFieldNewPassword.getText().isEmpty()&&!passwordFieldRepeat.getText().isEmpty()) {
+            if (passwordFieldNewPassword.getText().equals(passwordFieldRepeat.getText())) {
+                return true;
+            }
+            else{
+                Actions.showAlert("Password field cannot be empty");
+            }
         }
         Actions.showAlert("New passwords don't match");
         return false;

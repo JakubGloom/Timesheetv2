@@ -13,9 +13,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.datamdodel.Actions;
-import sample.datamdodel.StageManager;
 import sample.datamdodel.Task;
 import sample.datamdodel.TaskDAO;
 
@@ -74,17 +74,19 @@ public class ManageTasksController implements Initializable {
     }
 
     @FXML
-    private void openWorkdayScene(ActionEvent event) {
+    public  void openWorkdayScene(ActionEvent event) {
         try {
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Workday.fxml"));
             Parent root = loader.load();
 
             Stage stageWorkday = new Stage();
             stageWorkday.setScene(new Scene(root));
-            StageManager.closeStages(stageWorkday);
             stageWorkday.setResizable(false);
             stageWorkday.show();
+
+            WorkdayController workdayController = loader.getController();
+            stageWorkday.setOnCloseRequest(eventClose -> workdayController.send());
+
             ((Node) (event.getSource())).getScene().getWindow().hide();
         } catch (IOException e) {
             e.printStackTrace();
@@ -104,8 +106,11 @@ public class ManageTasksController implements Initializable {
                 editTaskController.initializeToEdit(toEditTask);
 
                 Stage editStage = new Stage();
-                StageManager.stages.add(editStage);
+
                 editStage.setScene(new Scene(root));
+
+                editStage.initModality(Modality.APPLICATION_MODAL);
+
                 editStage.setResizable(false);
                 editStage.show();
             } catch (IOException e) {

@@ -156,7 +156,7 @@ private static StringBuilder stringBuilder;
 
     public static void updateEmployeePasswordAndLogin(String login, String password){
 
-        String updateStmt = "UPDATE employee` SET `Login` = '"+login+"', `Password` = '"+password+"' WHERE (`idEmployee` = '"+Employee.loggedEmployee.getIdEmployee()+"')";
+        String updateStmt = "UPDATE employee SET Login = '"+login+"', Password = '"+password+"' WHERE idEmployee = '"+Employee.loggedEmployee.getIdEmployee()+"'";
 
         try {
             ConnectionManager.dbExecuteUpdate(updateStmt);
@@ -169,7 +169,7 @@ private static StringBuilder stringBuilder;
 
     public static void updateEmployeeLogin(String login){
 
-        String updateStmt = "UPDATE employee` SET `Login` = '"+login+"' WHERE (`idEmployee` = '"+Employee.loggedEmployee.getIdEmployee()+"')";
+        String updateStmt = "UPDATE employee SET Login = '"+login+"' WHERE idEmployee = '"+Employee.loggedEmployee.getIdEmployee()+"'";
 
         try {
             ConnectionManager.dbExecuteUpdate(updateStmt);
@@ -182,7 +182,7 @@ private static StringBuilder stringBuilder;
 
     public static void updateEmployeePassword(String password){
 
-        String updateStmt = "UPDATE employee` SET ``Password` = '"+password+"' WHERE (`idEmployee` = '"+Employee.loggedEmployee.getIdEmployee()+"')";
+        String updateStmt = "UPDATE employee SET Password = '"+password+"' WHERE idEmployee = '"+Employee.loggedEmployee.getIdEmployee()+"'";
 
         try {
             ConnectionManager.dbExecuteUpdate(updateStmt);
@@ -191,5 +191,32 @@ private static StringBuilder stringBuilder;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ObservableList<Employee> searchEmployeesNameSurnameId () throws SQLException, ClassNotFoundException {
+
+        String selectStmt = "SELECT idEmployee, Name, Surname FROM employee";
+
+        try {
+            ResultSet rsEmployees = ConnectionManager.dbExecuteQuery(selectStmt);
+
+            ObservableList<Employee> employeesList = getEmployeeListNameSurnameId(rsEmployees);
+            return employeesList;
+
+        } catch (SQLException e) {
+            System.out.println("SQL select operation has been failed: " + e);
+            throw e;
+        }
+    }
+
+    private static ObservableList<Employee> getEmployeeListNameSurnameId(ResultSet rs) throws SQLException{
+
+        ObservableList<Employee> employeesList = FXCollections.observableArrayList();
+
+        while (rs.next()) {
+            Employee employee = new Employee(rs.getInt("idEmployee"), rs.getString("Name"), rs.getString("Surname"));
+            employeesList.add(employee);
+        }
+        return employeesList;
     }
 }

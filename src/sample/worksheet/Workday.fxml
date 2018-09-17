@@ -42,13 +42,13 @@
                    <Button fx:id="btnLogout" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="75.0" text="Logout" />
                </children>
             </VBox>
-            <Button fx:id="btnSend" layoutX="104.0" layoutY="561.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Send" />
+            <Button fx:id="btnSend" layoutX="104.0" layoutY="561.0" mnemonicParsing="false" onAction="#send" prefHeight="25.0" prefWidth="75.0" text="Send" />
             <Button fx:id="btnCheck" layoutX="15.0" layoutY="561.0" mnemonicParsing="false" onAction="#checkEvents" prefHeight="25.0" prefWidth="75.0" text="Check" />
             <VBox layoutX="303.0" layoutY="246.0" spacing="10.0">
                <children>
                   <Button fx:id="buttonEmployees" mnemonicParsing="false" onAction="#openEmployeesWindow" prefHeight="25.0" prefWidth="75.0" text="Employees" />
                    <Button fx:id="buttonTasks" mnemonicParsing="false" onAction="#openTasksWindow" prefHeight="25.0" prefWidth="75.0" text="Tasks" />
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Report" />
+                  <Button fx:id="buttonReportDaily" mnemonicParsing="false" onAction="#openDailyReport" prefHeight="25.0" prefWidth="75.0" text="Report" />
                </children>
             </VBox>
              <VBox layoutX="14.0" layoutY="41.0" prefHeight="504.0" prefWidth="276.0" spacing="20.0">

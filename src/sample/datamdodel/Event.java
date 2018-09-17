@@ -11,6 +11,7 @@ public class Event {
     private int idEmployee;
     private int idTask;
     private Task task;
+    private Employee employee;
 
     public Event(int idEvent, Timestamp startDate, Timestamp endDate, int time, Task task) {
         this.idEvent = idEvent;
@@ -27,6 +28,10 @@ public class Event {
         this.isAccepted = isAccepted;
         this.idEmployee = idEmployee;
         this.task = task;
+    }
+
+    public Event(Employee employee) {
+        this.employee = employee;
     }
 
     public int getIdEvent() {
@@ -93,6 +98,13 @@ public class Event {
         this.task = task;
     }
 
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 
     @Override
     public String toString() {

@@ -2,6 +2,7 @@ package sample.worksheet;
 
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.datamdodel.*;
 
@@ -184,7 +186,10 @@ public class WorkdayController implements Initializable {
             stageEmployee.setScene(new Scene(root1));
             stageEmployee.show();
             stageEmployee.setResizable(false);
-            stageEmployee.setOnCloseRequest(event1 -> StageManager.closeStages(stageEmployee));
+
+            ManageEmployeesController manageEmployeesController = fxmlLoader.getController();
+            stageEmployee.setOnCloseRequest(eventClose -> manageEmployeesController.openWorkdayScene(event));
+
             ((Node) (event.getSource())).getScene().getWindow().hide();
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,29 +205,35 @@ public class WorkdayController implements Initializable {
             Stage stageKeywords = new Stage();
             StageManager.stages.add(stageKeywords);
 
-            stageKeywords.setTitle("Keywords");
+            stageKeywords.setTitle("Tasks");
             stageKeywords.setScene(new Scene(root1));
             stageKeywords.show();
             stageKeywords.setResizable(false);
-            stageKeywords.setOnCloseRequest(event1 -> StageManager.closeStages(stageKeywords));
+
+            ManageTasksController manageTasksController = fxmlLoader.getController();
+
+            stageKeywords.setOnCloseRequest(eventClose -> manageTasksController.openWorkdayScene(event));
             ((Node)(event.getSource())).getScene().getWindow().hide();
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
+
     @FXML
-    private void changeLoginData(ActionEvent event){
+    private void changeLoginData(){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ChangeLoginData.fxml"));
             Parent root1 = fxmlLoader.load();
 
             Stage stageChangeLoginData = new Stage();
-            StageManager.stages.add(stageChangeLoginData);
-
-            stageChangeLoginData.setTitle("Keywords");
+            stageChangeLoginData.setTitle("Data");
             stageChangeLoginData.setScene(new Scene(root1));
+
+            stageChangeLoginData.initModality(Modality.APPLICATION_MODAL);
+
             stageChangeLoginData.show();
             stageChangeLoginData.setResizable(false);
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -312,6 +323,46 @@ public class WorkdayController implements Initializable {
     private void loadAnotherDay(){
         localDate = datePickerAnotherDay.getValue();
         loadEventData(localDate);
+    }
+
+    @FXML
+    public void send(){
+        Platform.runLater(() -> {
+            if (!tableEvents.getItems().isEmpty()) {
+                try {
+                    ObservableList<Event> toSend = tableEvents.getItems();
+                    EventDAO.sendEvents(toSend);
+                } catch (Exception e) {
+                    Actions.showAlert(e.toString());
+                }
+                loadEventData(localDate);
+            }
+            else{
+                Actions.showInfo("No events to send");
+            }
+        });
+
+    }
+
+    @FXML
+    private void openDailyReport(ActionEvent event){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ReportDaily.fxml"));
+            Parent root1 = fxmlLoader.load();
+
+            Stage stageReportDaily = new Stage();
+            stageReportDaily.setTitle("Daily report");
+            stageReportDaily.setScene(new Scene(root1));
+            stageReportDaily.show();
+            stageReportDaily.setResizable(false);
+
+            ReportDailyController reportDailyController = fxmlLoader.getController();
+
+            stageReportDaily.setOnCloseRequest(eventClose -> reportDailyController.openWorkdayScene(event));
+            ((Node)(event.getSource())).getScene().getWindow().hide();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

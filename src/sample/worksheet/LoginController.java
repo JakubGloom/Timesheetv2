@@ -91,6 +91,9 @@ public class LoginController implements Initializable {
             stageWorkday.setResizable(false);
             stageWorkday.show();
 
+            WorkdayController workdayController = loader.getController();
+            stageWorkday.setOnCloseRequest(eventClose -> workdayController.send());
+
             ((Node)(event.getSource())).getScene().getWindow().hide();
         } catch (IOException e) {
             e.printStackTrace();

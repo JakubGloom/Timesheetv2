@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.datamdodel.Access;
 import sample.datamdodel.Employee;
@@ -81,19 +82,19 @@ public class ManageEmployeesController implements Initializable {
     }
 
     @FXML
-    private void openWorkdayScene(ActionEvent event){
+    public void openWorkdayScene(ActionEvent event){
         try {
-
             FXMLLoader loader=new FXMLLoader(getClass().getResource("Workday.fxml"));
             Parent root = loader.load();
 
-            WorkdayController workdayController =loader.getController();
-            workdayController.initializeLoggedEmployeeData();
-
             Stage stageWorkday = new Stage();
             stageWorkday.setScene(new Scene(root));
-            StageManager.closeStages(stageWorkday);
+            stageWorkday.setResizable(false);
             stageWorkday.show();
+
+            WorkdayController workdayController = loader.getController();
+            stageWorkday.setOnCloseRequest(eventClose -> workdayController.send());
+
             ((Node)(event.getSource())).getScene().getWindow().hide();
         } catch (IOException e) {
             e.printStackTrace();
@@ -114,6 +115,9 @@ public class ManageEmployeesController implements Initializable {
                 Stage editStage = new Stage();
                 StageManager.stages.add(editStage);
                 editStage.setScene(new Scene(root));
+
+                editStage.initModality(Modality.APPLICATION_MODAL);
+
                 editStage.setResizable(false);
                 editStage.show();
             } catch (IOException e) {

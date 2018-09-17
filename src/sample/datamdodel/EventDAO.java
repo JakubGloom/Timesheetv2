@@ -10,7 +10,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class EventDAO {
-
+    
+    
+    
     public static void insertEvent(Event eventToInsert) throws SQLException, ClassNotFoundException {
         String insertEvent = "INSERT INTO `databasetests`.`event` (`Start`, `End`, `Time`, `IsAccepted`, `idEmployee`, `idTask`) " +
                 "VALUES ('" + eventToInsert.getStartDate() + "', '" + eventToInsert.getEndDate() + "', '" + eventToInsert.getTime() + "', " +
@@ -35,6 +37,81 @@ public class EventDAO {
         }
     }
 
+    private static ObservableList<Event> getEventList(ResultSet rs) throws SQLException {
+        ObservableList<Event> eventList = FXCollections.observableArrayList();
+
+        while (rs.next()) {
+            Event event = new Event(rs.getInt("idEvent"), rs.getTimestamp("Start"), rs.getTimestamp("End"),
+                    rs.getInt("Time"), new Task(rs.getString("Name")));
+            eventList.add(event);
+        }
+        return eventList;
+    }
+
+    public static void checkCurrentEvents(TableView<Event> tableView) {
+        int count = 0;
+        for (int i = 0; i < tableView.getItems().size(); i++) {
+            if (tableView.getItems().get(i).getIdEvent()==0)
+                count++;
+        }
+        if(count==1)
+            Actions.showAlert("You have 1 event to send");
+        if (count > 1)
+            Actions.showAlert("You have: " + count + " events to send");
+        if (count==0){
+            Actions.showInfo("Every event have been send");
+        }
+    }
+    
+    public static void sendEvents(ObservableList<Event> toSend){
+        for (Event toSendEvent: toSend) {
+            if (ifContains(toSendEvent.getIdEvent())) {
+                try {
+                    insertEvent(toSendEvent);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static boolean ifContains(int id){
+        String checkStmt = "SELECT * FROM event WHERE idEvent=" + id;
+        System.out.println(id);
+        try {
+            ResultSet rsEvent = ConnectionManager.dbExecuteQuery(checkStmt);
+            if (rsEvent.next()){
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public static ObservableList<Event> singleReport(Employee selectedEmployee) throws SQLException, ClassNotFoundException {
+        String reportStmt = "SELECT idEvent, task.name, Start, End, Time FROM event " +
+        "JOIN task ON event.idTask=task.idTask WHERE idEmployee=" + selectedEmployee.getIdEmployee() +
+                " AND " + "Start>=" + "'" + LocalDate.now() + " 00:00:00' "
+                + "AND " + "End<=" + "'" + LocalDate.now() + " 23:59:59'";
+        try {
+            ResultSet rsEvent = ConnectionManager.dbExecuteQuery(reportStmt);
+
+            ObservableList<Event> eventList = getEventList(rsEvent);
+            return eventList;
+
+        } catch (SQLException e) {
+            System.out.println("SQL select operation has been failed: " + e);
+            throw e;
+        } catch (ClassNotFoundException e){
+            throw e;
+        }
+    }
+
     public static ObservableList<Event> searchEvents(LocalDate localDate) throws SQLException, ClassNotFoundException {
 
         String selectStmt = "SELECT idEvent, task.name, Start, End, Time FROM event " +
@@ -51,30 +128,5 @@ public class EventDAO {
             System.out.println("SQL select operation has been failed: " + e);
             throw e;
         }
-    }
-
-    private static ObservableList<Event> getEventList(ResultSet rs) throws SQLException {
-        ObservableList<Event> eventList = FXCollections.observableArrayList();
-
-        while (rs.next()) {
-            Event event = new Event(rs.getInt("idEvent"), rs.getTimestamp("Start"), rs.getTimestamp("End"),
-                    rs.getInt("Time"), new Task(rs.getString("Name")));
-            eventList.add(event);
-        }
-        return eventList;
-    }
-
-    public static boolean checkCurrentEvents(TableView<Event> tableView) {
-        int count = 0;
-        for (int i = 0; i < tableView.getItems().size(); i++) {
-            if (tableView.getItems().get(i).getEndDate() == null)
-                count++;
-        }
-        if(count!=0) {
-            Actions.showAlert("You have: " + count + "unclosed events");
-            return false;
-        }
-        Actions.showAlert("Every event is closed");
-        return true;
     }
 }
