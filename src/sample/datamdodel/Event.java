@@ -2,7 +2,7 @@ package sample.datamdodel;
 
 import java.sql.Timestamp;
 
-public class Event {
+public class Event{
     private int idEvent;
     private Timestamp startDate;
     private Timestamp endDate;

@@ -219,4 +219,21 @@ private static StringBuilder stringBuilder;
         }
         return employeesList;
     }
+
+    public static int validateEmployeeAcount(int id){
+        String accountStmt = "SELECT idAcess FROM account WHERE idEmployee =" + id;
+
+        try {
+            ResultSet rsEmployees = ConnectionManager.dbExecuteQuery(accountStmt);
+            if (rsEmployees.next()){
+                int accesId = rsEmployees.getInt("idAcess");
+                return accesId;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }

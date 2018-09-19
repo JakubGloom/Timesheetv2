@@ -124,6 +124,7 @@ public class ReportDailyController implements Initializable {
             TreeItem<Event> events = new TreeItem<>(eventToInsert);
             itemRoot.getChildren().setAll((events));
         }
+
         treeTableViewReport.setRoot(itemRoot);
     }
 

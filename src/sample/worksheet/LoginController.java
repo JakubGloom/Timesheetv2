@@ -46,16 +46,22 @@ public class LoginController implements Initializable {
 
     @FXML
     public void onButtonClicked(ActionEvent event) {
-        if (this.isLoginValid()) {
-            System.out.println("Login success");
-            openWorkdayScene(event);
-        } else {
-            textFieldLogin.clear();
-            passwordFieldPassword.clear();
-            if (noConnection)
-                System.out.println("No connection to the Database");
-            else
-                labelDisplayStatus.setText("Invalid username or password !");
+        try {
+            if (this.isLoginValid()) {
+                System.out.println("Login success");
+                openWorkdayScene(event);
+            } else {
+                textFieldLogin.clear();
+                passwordFieldPassword.clear();
+                if (noConnection)
+                    labelDisplayStatus.setText("No connection to the Database");
+                else
+                    labelDisplayStatus.setText("Invalid username or password !");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 

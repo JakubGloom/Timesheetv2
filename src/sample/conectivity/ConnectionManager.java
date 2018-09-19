@@ -5,7 +5,7 @@ import com.sun.rowset.CachedRowSetImpl;
 import java.sql.*;
 
 public class ConnectionManager{
-    private static final String url = "jdbc:mysql://localhost:3306/databasetests?useSSL=false";
+    private static final String url = "jdbc:mysql://127.0.0.1:3306/databasetests?useSSL=false";
     private static final String JDBC_DRIVER  = "com.mysql.jdbc.Driver";
     private static final String username = "root";
     private static final String password = "Susanoo12345@";

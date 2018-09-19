@@ -40,10 +40,10 @@ public class WorkdayController implements Initializable {
     private Button buttonChange;
 
     @FXML
-    private Button buttonReport;
+    private Button buttonReportDaily;
 
     @FXML
-    private Button buttonKeywords;
+    private Button buttonTasks;
 
     @FXML
     private Button buttonEmployees;
@@ -125,7 +125,7 @@ public class WorkdayController implements Initializable {
 
         localDate = LocalDate.now();
         System.out.println(localDate);
-
+        buttonsController(EmployeeDAO.validateEmployeeAcount(Employee.loggedEmployee.getIdEmployee()));
         loadEventData(localDate);
         loadTasks();
         initializeLoggedEmployeeData();
@@ -258,7 +258,7 @@ public class WorkdayController implements Initializable {
                 System.out.println(lastIndex);
             }
 
-            if (start.before(end)&&(start.after(lastAdded)||start.equals(lastAdded))) {
+            if ( start.before(end)&&(start.after(lastAdded)||start.equals(lastAdded))&&(start.after(Timestamp.valueOf(localDate + " 00:00:00"))||end.before(Timestamp.valueOf(localDate + " 23:59:59")))) {
                 int elapsedMinutes = (int) Duration.between(startTime, endTime).toMinutes();
 
                 Task selectedTask = tableViewTasks.getSelectionModel().getSelectedItem();
@@ -365,4 +365,30 @@ public class WorkdayController implements Initializable {
         }
     }
 
+    private void buttonsController(int id){
+        switch (id) {
+            case 1:
+                buttonReportDaily.setVisible(false);
+                buttonReportDaily.setDisable(true);
+                buttonTasks.setVisible(false);
+                buttonTasks.setDisable(true);
+                buttonEmployees.setVisible(false);
+                buttonEmployees.setDisable(true);
+                break;
+            case 2:
+                buttonReportDaily.setVisible(false);
+                buttonReportDaily.setDisable(true);
+                buttonEmployees.setVisible(false);
+                buttonEmployees.setDisable(true);
+                break;
+            case 3:
+                break;
+        }
+    }
+
+    private boolean validateTime(Timestamp start, Timestamp end){
+
+
+        return false;
+    }
 }
