@@ -3,6 +3,7 @@ package sample.datamdodel;
 import java.sql.Timestamp;
 
 public class Event{
+
     private int idEvent;
     private Timestamp startDate;
     private Timestamp endDate;
@@ -10,6 +11,7 @@ public class Event{
     private int isAccepted = 0;
     private int idEmployee;
     private int idTask;
+
     private Task task;
     private Employee employee;
 
@@ -106,6 +108,10 @@ public class Event{
         this.employee = employee;
     }
 
+    public String getFullName(){
+        return employee.getFullName();
+    }
+    
     @Override
     public String toString() {
         return "Event{" +

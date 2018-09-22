@@ -44,6 +44,7 @@ public class ReportDailyController implements Initializable {
     @FXML
     private TreeTableColumn<Event, Integer> columnMinutes;
 
+
     @FXML
     private TableView<Employee> tableViewEmployeeToPick;
 
@@ -61,6 +62,7 @@ public class ReportDailyController implements Initializable {
         columnIdEmployee.setCellValueFactory(new PropertyValueFactory<>("Employee"));
         columnName.setCellValueFactory(new PropertyValueFactory<>("Name"));
         columnSurname.setCellValueFactory(new PropertyValueFactory<>("Surname"));
+
         columnEmployee.setCellValueFactory(new TreeItemPropertyValueFactory<>("fullName"));
         columnTask.setCellValueFactory(new TreeItemPropertyValueFactory<>("task"));
         columnStartDate.setCellValueFactory(new TreeItemPropertyValueFactory<>("startDate"));

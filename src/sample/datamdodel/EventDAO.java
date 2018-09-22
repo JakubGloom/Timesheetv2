@@ -94,6 +94,7 @@ public class EventDAO{
     }
 
     public static ObservableList<Event> singleReport(Employee selectedEmployee) throws SQLException, ClassNotFoundException {
+
         String reportStmt = "SELECT idEvent, task.name, Start, End, Time FROM event " +
         "JOIN task ON event.idTask=task.idTask WHERE idEmployee=" + selectedEmployee.getIdEmployee() +
                 " AND " + "Start>=" + "'" + LocalDate.now() + " 00:00:00' "

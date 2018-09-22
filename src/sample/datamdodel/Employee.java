@@ -8,7 +8,7 @@ public class Employee {
     private String password;
     private String access;
     private int seed;
-    private String fullName;
+    private String fullName = " ";
 
     public static Employee loggedEmployee;
 
