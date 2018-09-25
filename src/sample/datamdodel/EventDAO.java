@@ -95,14 +95,15 @@ public class EventDAO{
 
     public static ObservableList<Event> singleReport(Employee selectedEmployee) throws SQLException, ClassNotFoundException {
 
-        String reportStmt = "SELECT idEvent, task.name, Start, End, Time FROM event " +
-        "JOIN task ON event.idTask=task.idTask WHERE idEmployee=" + selectedEmployee.getIdEmployee() +
-                " AND " + "Start>=" + "'" + LocalDate.now() + " 00:00:00' "
-                + "AND " + "End<=" + "'" + LocalDate.now() + " 23:59:59'";
+        String reportStmt = "SELECT idEvent, employee.Name, employee.Surname, task.name, Start, End, Time " +
+                "FROM event INNER JOIN task ON event.idTask=task.idTask " +
+                "INNER JOIN employee ON event.idEmployee=employee.idEmployee="+selectedEmployee.getIdEmployee() +
+                " WHERE Start>=" + "'" + LocalDate.now() + " 00:00:00' "
+                + "AND End<=" + "'" + LocalDate.now() + " 23:59:59'";
         try {
             ResultSet rsEvent = ConnectionManager.dbExecuteQuery(reportStmt);
 
-            ObservableList<Event> eventList = getEventList(rsEvent);
+            ObservableList<Event> eventList = getEventListReport(rsEvent);
             return eventList;
 
         } catch (SQLException e) {
@@ -129,5 +130,18 @@ public class EventDAO{
             System.out.println("SQL select operation has been failed: " + e);
             throw e;
         }
+    }
+
+    private static ObservableList<Event> getEventListReport(ResultSet rs) throws SQLException {
+        ObservableList<Event> eventList = FXCollections.observableArrayList();
+
+        while (rs.next()) {
+            Employee employee = new Employee(rs.getString("Name"), rs.getString("Surname"));
+            Event event = new Event(employee,rs.getInt("idEvent"), rs.getTimestamp("Start"), rs.getTimestamp("End"),
+                    rs.getInt("Time"), new Task(rs.getString(4)));
+            eventList.add(event);
+            System.out.println(event.toString());
+        }
+        return eventList;
     }
 }

@@ -32,9 +32,21 @@ public class Event{
         this.task = task;
     }
 
+    public Event(Employee employee, int idEvent, Timestamp startDate, Timestamp endDate, int time, Task task){
+        this.employee = employee;
+        this.idEvent = idEvent;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.time = time;
+        this.task = task;
+
+    }
+
     public Event(Employee employee) {
         this.employee = employee;
     }
+
+
 
     public int getIdEvent() {
         return idEvent;
@@ -60,9 +72,7 @@ public class Event{
         this.endDate = endDate;
     }
 
-    public int getTime() {
-        return time;
-    }
+    public int getTime() { return time; }
 
     public void setTime(int time) {
         this.time = time;
@@ -73,7 +83,6 @@ public class Event{
     }
 
     public void setIsAccepted(int isAccepted) {
-        this.isAccepted = isAccepted;
     }
 
     public int getIdEmployee() {
@@ -111,7 +120,7 @@ public class Event{
     public String getFullName(){
         return employee.getFullName();
     }
-    
+
     @Override
     public String toString() {
         return "Event{" +
@@ -123,6 +132,7 @@ public class Event{
                 ", idEmployee=" + idEmployee +
                 ", idTask=" + idTask +
                 ", task=" + task +
+                ", employee=" + employee +
                 '}';
     }
 }

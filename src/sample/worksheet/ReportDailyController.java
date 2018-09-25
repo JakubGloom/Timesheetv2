@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.Timestamp;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ReportDailyController implements Initializable {
@@ -30,7 +31,7 @@ public class ReportDailyController implements Initializable {
     private TreeTableView<Event> treeTableViewReport;
 
     @FXML
-    private TreeTableColumn<Event, Employee> columnEmployee;
+    private TreeTableColumn<Event, String> columnEmployee;
 
     @FXML
     private TreeTableColumn<Event, String> columnTask;
@@ -109,11 +110,15 @@ public class ReportDailyController implements Initializable {
     }
 
     @FXML
-    private void reportForOnePickedEmployee(){
+    public void reportForOnePickedEmployee(){
+
         Employee selectedEmployee = tableViewEmployeeToPick.getSelectionModel().getSelectedItem();
+
         Event event = new Event(selectedEmployee);
+        ArrayList<TreeItem<Event>> eventsToInsert = new ArrayList<>();
         TreeItem<Event> itemRoot = new TreeItem<>(event);
         ObservableList<Event> employeeEvents = null;
+
         try {
             employeeEvents = EventDAO.singleReport(selectedEmployee);
         } catch (SQLException e) {
@@ -124,11 +129,39 @@ public class ReportDailyController implements Initializable {
 
         for (Event eventToInsert: employeeEvents) {
             TreeItem<Event> events = new TreeItem<>(eventToInsert);
-            itemRoot.getChildren().setAll((events));
+            eventsToInsert.add(events);
         }
 
+        itemRoot.getChildren().setAll((eventsToInsert));
         treeTableViewReport.setRoot(itemRoot);
     }
 
+    @FXML
+    public void reportForAll(){
+        ObservableList<Employee> employeesEvents = tableViewEmployeeToPick.getItems();
+        for (Employee employeeToInsert: employeesEvents) {
+            Event eventsFromEmployee = new Event(employeeToInsert);
+
+            ArrayList<TreeItem<Event>> eventsToInsert = new ArrayList<>();
+            TreeItem<Event> itemRoot = new TreeItem<>(eventsFromEmployee);
+            ObservableList<Event> employeeEvents = null;
+
+            try {
+                employeeEvents = EventDAO.singleReport(employeeToInsert);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            for (Event employeeEventsToInsert : employeeEvents) {
+                TreeItem<Event> events = new TreeItem<>(employeeEventsToInsert);
+                eventsToInsert.add(events);
+            }
+
+            itemRoot.getChildren().setAll(eventsToInsert);
+            treeTableViewReport.setRoot(itemRoot);
+        }
+    }
 
 }

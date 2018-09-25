@@ -37,6 +37,12 @@ public class Employee {
         this.fullName = name + " " + surname;
     }
 
+    public Employee(String name, String surname) {
+        this.name = name;
+        this.surname = surname;
+        this.fullName = name + " " + surname;
+    }
+
     public int getIdEmployee() {
         return idEmployee;
     }

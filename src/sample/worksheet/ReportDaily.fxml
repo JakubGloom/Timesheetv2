@@ -24,7 +24,7 @@
       <Button fx:id="buttonBack" layoutX="813.0" layoutY="575.0" mnemonicParsing="false" onAction="#openWorkdayScene" prefHeight="25.0" prefWidth="68.0" text="Back" />
       <HBox layoutX="574.0" layoutY="575.0" spacing="10.0">
          <children>
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="All" />
+            <Button fx:id="buttonReportAlll" mnemonicParsing="false" onAction="#reportForAll" prefHeight="25.0" prefWidth="68.0" text="All" />
             <Button fx:id="buttonReportSelected" mnemonicParsing="false" onAction="#reportForOnePickedEmployee" prefHeight="25.0" prefWidth="68.0" text="Selected" />
          </children>
       </HBox>
