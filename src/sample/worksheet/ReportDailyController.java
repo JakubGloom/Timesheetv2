@@ -69,6 +69,10 @@ public class ReportDailyController implements Initializable {
         columnStartDate.setCellValueFactory(new TreeItemPropertyValueFactory<>("startDate"));
         columnEndDate.setCellValueFactory(new TreeItemPropertyValueFactory<>("endDate"));
         columnMinutes.setCellValueFactory(new TreeItemPropertyValueFactory<>("time"));
+
+        tableViewEmployeeToPick.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        tableViewEmployeeToPick.getSelectionModel().setCellSelectionEnabled(true);
+
         try {
             loadEmployees();
         } catch (SQLException e) {
@@ -139,11 +143,12 @@ public class ReportDailyController implements Initializable {
     @FXML
     public void reportForAll(){
         ObservableList<Employee> employeesEvents = tableViewEmployeeToPick.getItems();
+        TreeItem<Event> itemRoot = new TreeItem<>();
         for (Employee employeeToInsert: employeesEvents) {
             Event eventsFromEmployee = new Event(employeeToInsert);
 
             ArrayList<TreeItem<Event>> eventsToInsert = new ArrayList<>();
-            TreeItem<Event> itemRoot = new TreeItem<>(eventsFromEmployee);
+            TreeItem<Event>itemBranch = new TreeItem<>(eventsFromEmployee);
             ObservableList<Event> employeeEvents = null;
 
             try {
@@ -159,9 +164,11 @@ public class ReportDailyController implements Initializable {
                 eventsToInsert.add(events);
             }
 
-            itemRoot.getChildren().setAll(eventsToInsert);
-            treeTableViewReport.setRoot(itemRoot);
+            itemBranch.getChildren().setAll(eventsToInsert);
+            itemRoot.getChildren().add(itemBranch);
         }
+        treeTableViewReport.setRoot(itemRoot);
+        treeTableViewReport.setShowRoot(false);
     }
 
 }

@@ -97,8 +97,8 @@ public class EventDAO{
 
         String reportStmt = "SELECT idEvent, employee.Name, employee.Surname, task.name, Start, End, Time " +
                 "FROM event INNER JOIN task ON event.idTask=task.idTask " +
-                "INNER JOIN employee ON event.idEmployee=employee.idEmployee="+selectedEmployee.getIdEmployee() +
-                " WHERE Start>=" + "'" + LocalDate.now() + " 00:00:00' "
+                "INNER JOIN employee ON event.idEmployee=employee.idEmployee" +
+                " WHERE event.idEmployee ="+selectedEmployee.getIdEmployee()+" AND Start>=" + "'" + LocalDate.now() + " 00:00:00' "
                 + "AND End<=" + "'" + LocalDate.now() + " 23:59:59'";
         try {
             ResultSet rsEvent = ConnectionManager.dbExecuteQuery(reportStmt);
