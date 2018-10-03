@@ -365,6 +365,27 @@ public class WorkdayController implements Initializable {
         }
     }
 
+    @FXML
+    private void openDateReport(ActionEvent event){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ReportDate.fxml"));
+            Parent root1 = fxmlLoader.load();
+
+            Stage stageReportDaily = new Stage();
+            stageReportDaily.setTitle("Periodical report");
+            stageReportDaily.setScene(new Scene(root1));
+            stageReportDaily.show();
+            stageReportDaily.setResizable(false);
+
+            ReportDateController reportDateController = fxmlLoader.getController();
+
+            stageReportDaily.setOnCloseRequest(eventClose -> reportDateController.openWorkdayScene(event));
+            ((Node)(event.getSource())).getScene().getWindow().hide();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void buttonsController(int id){
         switch (id) {
             case 1:

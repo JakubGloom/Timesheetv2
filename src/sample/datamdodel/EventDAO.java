@@ -93,17 +93,38 @@ public class EventDAO{
         return true;
     }
 
-    public static ObservableList<Event> singleReport(Employee selectedEmployee) throws SQLException, ClassNotFoundException {
+    public static ObservableList<Event> singleReport(Employee selectedEmployee, LocalDate localDate) throws SQLException, ClassNotFoundException {
 
         String reportStmt = "SELECT idEvent, employee.Name, employee.Surname, task.name, Start, End, Time " +
                 "FROM event INNER JOIN task ON event.idTask=task.idTask " +
                 "INNER JOIN employee ON event.idEmployee=employee.idEmployee" +
-                " WHERE event.idEmployee ="+selectedEmployee.getIdEmployee()+" AND Start>=" + "'" + LocalDate.now() + " 00:00:00' "
-                + "AND End<=" + "'" + LocalDate.now() + " 23:59:59'";
+                " WHERE event.idEmployee ="+selectedEmployee.getIdEmployee()+" AND Start>=" + "'" + localDate + " 00:00:00' "
+                + "AND End<=" + "'" + localDate + " 23:59:59'";
         try {
             ResultSet rsEvent = ConnectionManager.dbExecuteQuery(reportStmt);
 
             ObservableList<Event> eventList = getEventListReport(rsEvent);
+            return eventList;
+
+        } catch (SQLException e) {
+            System.out.println("SQL select operation has been failed: " + e);
+            throw e;
+        } catch (ClassNotFoundException e){
+            throw e;
+        }
+    }
+
+    public static ObservableList<Event> singleDateToDateReport(Employee selectedEmployee, LocalDate from, LocalDate to) throws SQLException, ClassNotFoundException {
+
+        String reportStmt = "SELECT idEvent, employee.Name, employee.Surname, task.name, Time " +
+                "FROM event INNER JOIN task ON event.idTask=task.idTask " +
+                "INNER JOIN employee ON event.idEmployee=employee.idEmployee" +
+                " WHERE event.idEmployee ="+selectedEmployee.getIdEmployee()+" AND Start>=" + "'" + from + " 00:00:00' "
+                + "AND End<=" + "'" + to + " 23:59:59'";
+        try {
+            ResultSet rsEvent = ConnectionManager.dbExecuteQuery(reportStmt);
+
+            ObservableList<Event> eventList = getEventListReportDateToDate(rsEvent);
             return eventList;
 
         } catch (SQLException e) {
@@ -139,6 +160,17 @@ public class EventDAO{
             Employee employee = new Employee(rs.getString("Name"), rs.getString("Surname"));
             Event event = new Event(employee,rs.getInt("idEvent"), rs.getTimestamp("Start"), rs.getTimestamp("End"),
                     rs.getInt("Time"), new Task(rs.getString(4)));
+            eventList.add(event);
+            System.out.println(event.toString());
+        }
+        return eventList;
+    }
+    private static ObservableList<Event> getEventListReportDateToDate(ResultSet rs) throws SQLException {
+        ObservableList<Event> eventList = FXCollections.observableArrayList();
+
+        while (rs.next()) {
+            Employee employee = new Employee(rs.getString("Name"), rs.getString("Surname"));
+            Event event = new Event(employee,rs.getInt("idEvent"),rs.getInt("Time"), new Task(rs.getString(4)));
             eventList.add(event);
             System.out.println(event.toString());
         }

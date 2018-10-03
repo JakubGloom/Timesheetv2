@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXDatePicker?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<AnchorPane prefHeight="613.0" prefWidth="959.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.worksheet.ReportDailyController">
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="661.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.worksheet.ReportDailyController">
    <children>
-      <TreeTableView fx:id="treeTableViewReport" prefHeight="614.0" prefWidth="632.0">
+      <TreeTableView fx:id="treeTableViewReport" prefHeight="661.0" prefWidth="632.0">
         <columns>
           <TreeTableColumn fx:id="columnEmployee" prefWidth="180.0" resizable="false" text="Employee" />
             <TreeTableColumn fx:id="columnTask" prefWidth="100.0" resizable="false" text="Task" />
             <TreeTableColumn fx:id="columnStartDate" prefWidth="130.0" resizable="false" text="Start date" />
             <TreeTableColumn fx:id="columnEndDate" prefWidth="130.0" resizable="false" text="End date" />
-            <TreeTableColumn fx:id="columnMinutes" prefWidth="89.0" resizable="false" text="Minutes" />
+            <TreeTableColumn fx:id="columnMinutes" prefWidth="90.0" resizable="false" text="Minutes" />
         </columns>
       </TreeTableView>
-      <TableView fx:id="tableViewEmployeeToPick" layoutX="632.0" prefHeight="563.0" prefWidth="330.0">
+      <TableView fx:id="tableViewEmployeeToPick" layoutX="632.0" prefHeight="554.0" prefWidth="330.0">
         <columns>
           <TableColumn fx:id="columnName" prefWidth="165.0" resizable="false" text="Name" />
             <TableColumn fx:id="columnSurname" prefWidth="163.0" resizable="false" text="Surname" />
             <TableColumn fx:id="columnIdEmployee" prefWidth="163.0" visible="false" />
         </columns>
       </TableView>
-      <Button fx:id="buttonBack" layoutX="880.0" layoutY="575.0" mnemonicParsing="false" onAction="#openWorkdayScene" prefHeight="25.0" prefWidth="68.0" text="Back" />
-      <HBox layoutX="639.0" layoutY="575.0" spacing="10.0">
+      <Button fx:id="buttonBack" layoutX="880.0" layoutY="626.0" mnemonicParsing="false" onAction="#openWorkdayScene" prefHeight="25.0" prefWidth="68.0" text="Back" />
+      <HBox layoutX="639.0" layoutY="626.0" spacing="10.0">
          <children>
             <Button fx:id="buttonReportAlll" mnemonicParsing="false" onAction="#reportForAll" prefHeight="25.0" prefWidth="68.0" text="All" />
             <Button fx:id="buttonReportSelected" mnemonicParsing="false" onAction="#reportForOnePickedEmployee" prefHeight="25.0" prefWidth="68.0" text="Selected" />
          </children>
       </HBox>
+      <JFXDatePicker fx:id="datePickedPickDateForReport" editable="false" layoutX="639.0" layoutY="579.0" />
+      <Label fx:id="labelPickDate" layoutX="639.0" layoutY="562.0" prefHeight="17.0" prefWidth="68.0" text="Pick date">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

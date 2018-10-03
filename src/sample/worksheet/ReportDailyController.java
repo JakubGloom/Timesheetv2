@@ -1,5 +1,6 @@
 package sample.worksheet;
 
+import com.jfoenix.controls.JFXDatePicker;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.Timestamp;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -58,6 +60,9 @@ public class ReportDailyController implements Initializable {
     @FXML
     private TableColumn<Employee, String> columnIdEmployee;
 
+    @FXML
+    private JFXDatePicker datePickedPickDateForReport;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         columnIdEmployee.setCellValueFactory(new PropertyValueFactory<>("Employee"));
@@ -72,6 +77,8 @@ public class ReportDailyController implements Initializable {
 
         tableViewEmployeeToPick.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableViewEmployeeToPick.getSelectionModel().setCellSelectionEnabled(true);
+
+        datePickedPickDateForReport.setValue(LocalDate.now());
 
         try {
             loadEmployees();
@@ -116,28 +123,35 @@ public class ReportDailyController implements Initializable {
     @FXML
     public void reportForOnePickedEmployee(){
 
-        Employee selectedEmployee = tableViewEmployeeToPick.getSelectionModel().getSelectedItem();
+        TreeItem<Event> itemRoot = new TreeItem<>();
+        ObservableList<Employee> selectedEmployees = tableViewEmployeeToPick.getSelectionModel().getSelectedItems();
 
-        Event event = new Event(selectedEmployee);
-        ArrayList<TreeItem<Event>> eventsToInsert = new ArrayList<>();
-        TreeItem<Event> itemRoot = new TreeItem<>(event);
-        ObservableList<Event> employeeEvents = null;
+        for (Employee selectedEmployee: selectedEmployees) { ;
+            Event eventsFromEmployee = new Event(selectedEmployee);
+            TreeItem<Event> itemBranch = new TreeItem<>(eventsFromEmployee);
 
-        try {
-            employeeEvents = EventDAO.singleReport(selectedEmployee);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            ArrayList<TreeItem<Event>> eventsToInsert = new ArrayList<>();
+            ObservableList<Event> employeeEvents = null;
+
+            try {
+                employeeEvents = EventDAO.singleReport(selectedEmployee, datePickedPickDateForReport.getValue());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            for (Event eventToInsert: employeeEvents) {
+                TreeItem<Event> events = new TreeItem<>(eventToInsert);
+                eventsToInsert.add(events);
+            }
+
+            itemBranch.getChildren().setAll(eventsToInsert);
+            itemRoot.getChildren().add(itemBranch);
         }
 
-        for (Event eventToInsert: employeeEvents) {
-            TreeItem<Event> events = new TreeItem<>(eventToInsert);
-            eventsToInsert.add(events);
-        }
-
-        itemRoot.getChildren().setAll((eventsToInsert));
         treeTableViewReport.setRoot(itemRoot);
+        treeTableViewReport.setShowRoot(false);
     }
 
     @FXML
@@ -152,7 +166,7 @@ public class ReportDailyController implements Initializable {
             ObservableList<Event> employeeEvents = null;
 
             try {
-                employeeEvents = EventDAO.singleReport(employeeToInsert);
+                employeeEvents = EventDAO.singleReport(employeeToInsert,datePickedPickDateForReport.getValue());
             } catch (SQLException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {

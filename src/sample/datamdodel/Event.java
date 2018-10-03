@@ -1,8 +1,10 @@
 package sample.datamdodel;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
 import java.sql.Timestamp;
 
-public class Event{
+public class Event extends RecursiveTreeObject<Event> {
 
     private int idEvent;
     private Timestamp startDate;
@@ -40,6 +42,13 @@ public class Event{
         this.time = time;
         this.task = task;
 
+    }
+
+    public Event(Employee employee, int idEvent, int time, Task task) {
+        this.idEvent = idEvent;
+        this.time = time;
+        this.task = task;
+        this.employee = employee;
     }
 
     public Event(Employee employee) {
@@ -119,6 +128,10 @@ public class Event{
 
     public String getFullName(){
         return employee.getFullName();
+    }
+
+    public void addTime(int time){
+        this.time+=time;
     }
 
     @Override
